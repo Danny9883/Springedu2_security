@@ -31,6 +31,8 @@ public class SecutiryConfig {
                         exception.accessDeniedPage("/access-denied")
                 ); // 접근 거부 페이지 처리
 
+        return http.build();
+
     }
 
     // 비밀번호를 암호화
