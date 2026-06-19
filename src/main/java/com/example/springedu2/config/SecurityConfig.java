@@ -8,11 +8,14 @@ import org.springframework.security.web.SecurityFilterChain;
 
 // SpringSecurity 의 설정
 @Configuration
-public class SecutiryConfig {
+public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())  // 실무는 설정, 공부 설정안함
+        http
+                // 서버가 내려주는 csrf 토큰값을 사용하지 않는다
+                // visitorForm.html 순수 html 이라 서버의 csrf 토큰을 보관 처리 불가능
+                .csrf(csrf -> csrf.disable())  // 실무는 설정, 공부 설정안함
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/", "/index.html",
@@ -22,10 +25,22 @@ public class SecutiryConfig {
                         .requestMatchers("/admin/**","/vupdate", "/vdelete").hasRole("ADMIN")
                         .requestMatchers(
                                 "/visitorMain.html", "/visitorForm.html",
-                                "/vlist", "/vinsert", "/vsearch", "/one", "/members/me"
+                                "/one","/vlist", "/vinsert", "/vsearch",  "/members/me"
                         ).authenticated() // 로그인이 필요하다
                         .anyRequest().authenticated() // 설정하지 않은 다른 요청도 로그인 필요
-                ).formLogin(form -> form.loginPage("/login"))
+                )
+                // formLogin() 는 사용자가 <form> 으로 입력한 username, password 를 기반으로 인증한다
+                .formLogin(
+                        form -> form
+                                .loginPage("/login")
+                                // GET /login -> PageController에 /login 주소로 이동 -> login.html 로 보낸다
+                                // 내가 만든 로그인화면 사용
+                                .loginProcessingUrl("/login") // 생략가능
+                                // Post /login
+                                // SpringSecurity 가 username, password 읽어서 인증처리한다 : 자동
+                                .defaultSuccessUrl("/visitorMain.html", true)
+                                .permitAll()
+                )
                 .logout(logout -> logout.logoutUrl("/logout"))
                 .exceptionHandling(exception ->
                         exception.accessDeniedPage("/access-denied")
