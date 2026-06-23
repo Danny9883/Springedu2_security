@@ -37,7 +37,7 @@ public class MemberController {
 
        // 입력에 오류가 있다면 다시 입력화면으로 돌아감.
        if (bindingResult.hasErrors()) {
-           return "memberResister";  // memberRegister.html
+           return "memberRegister";  // memberRegister.html
        }
 
        // 회원가입 : db 에 저장
