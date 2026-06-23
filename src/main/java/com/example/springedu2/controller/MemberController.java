@@ -44,15 +44,21 @@ public class MemberController {
        try {
            memberService.register(memberForm);
        } catch (IllegalArgumentException e) {
-           bindingResult.reject("가입 실패", e.getMessage());
+           bindingResult.reject("registerFail", e.getMessage());
            redirectAttributes.addFlashAttribute("msg", "회원가입이 실패하였습니다" + e.getMessage());
            return "memberRegister";
        }
 
+       // 반드시 redirect 할때만 사용가능 하다 redirect:/login
        redirectAttributes.addFlashAttribute("msg", "회원가입이 완료되었습니다. 로그인 하십시오.");
 
        return "redirect:/login";
 
+    }
+
+    @GetMapping("visitorMain")
+    public String visitorMain(Model model) {
+       return "visitorMain";
     }
 
     // 내정보

@@ -1,13 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Spring Boot 4 방명록</title>
-    <link rel="stylesheet" href="css/visitor.css" />
+    <link rel="stylesheet" href="/css/visitor.css" />
 </head>
 <body>
   <h1>방 명 록</h1>
   <p>로그인한 사용자만 방명록을 사용 할 수 있습니다. 수정/삭제와 회원관리는 ADMIN 만 가능!</p>
+  <p>
+    <span th:if="${loggedIn}">로그인 상태입니다.</span>
+    <span th:if="${!loggedIn}">로그인하지 않았습니다.</span>
+  </p>
+  <p>
+    로그인한 아이디: <span th:text="${loginUsername}">username</span>
+  </p>
+  <p>
+    관리자여부: <span th:text="${isAdmin}"></span>
+  </p>
   <p>반갑습니다 ㅎㅎ 찾아오신분 복받으실거에용</p>
   <hr>
   <a href="/vlist"><button>방명록 리스트 보기</button></a>

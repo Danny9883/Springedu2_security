@@ -70,7 +70,7 @@ public class MemberService implements UserDetailsService {
     }
 
 
-    private Member create(MemberCreateForm memberForm) {
+    public Member create(MemberCreateForm memberForm) {
         // 기존회원인지 조회
         vaildNewMember(memberForm.getUsername(), memberForm.getEmail());
 
@@ -79,7 +79,7 @@ public class MemberService implements UserDetailsService {
         member.setPassword( passwordEncoder.encode(memberForm.getPassword()) );
         member.setName( memberForm.getName() );
         member.setEmail( memberForm.getEmail() );
-        member.setRole( parseRole(member.getRole().name()) );
+        member.setRole( parseRole(memberForm.getRole()) );
         member.setEnabled( true );
         return memberRepository.save( member );
     }
