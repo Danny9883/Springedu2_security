@@ -112,10 +112,10 @@ public class AdminController {
 
         try {
             memberService.delete(id, authentication.getName());
+            redirectAttributes.addFlashAttribute("msg", "삭제가 완료되었습니다.");
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("msg", e.getMessage());
         }
-        redirectAttributes.addFlashAttribute("msg", "삭제가 완료되었습니다.");
         return "redirect:/admin/members";
     }
 
