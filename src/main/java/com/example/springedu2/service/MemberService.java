@@ -139,6 +139,16 @@ public class MemberService implements UserDetailsService {
     }
 
 
+    // 회원정보 삭제 - 관리자
+    @Transactional
+    public void delete(Long id, String name) {
+        Member member = findById(id);
+        if (member.getUsername().equals(name)) {
+            throw new IllegalArgumentException("현재 로그인한 자신은 삭제할 수 없습니다");
+        }
+        memberRepository.delete(member);
+    }
+
 
 
 }

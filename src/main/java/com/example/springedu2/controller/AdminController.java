@@ -6,6 +6,7 @@ import com.example.springedu2.entity.Member;
 import com.example.springedu2.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -81,6 +83,7 @@ public class AdminController {
     public String adminEdit(@PathVariable Long id,
                             @Valid @ModelAttribute("memberForm") MemberUpdateForm form,
                             BindingResult bindingResult,
+                            RedirectAttributes redirectAttributes,
                             Model model) {
         // 넘어온 정보를 수정한다
         Member member = memberService.findById(id);
@@ -91,12 +94,28 @@ public class AdminController {
 
         try {
             memberService.update(id, form, true);
+            redirectAttributes.addFlashAttribute("msg", "수정이 완료되었습니다.");
         } catch (IllegalArgumentException e) {
             bindingResult.reject("updateFail", e.getMessage());
             model.addAttribute("member", member);
             return "memberAdminEditForm";
         }
 
+        return "redirect:/admin/members";
+    }
+
+    // 회원삭제 - 관리자
+    @PostMapping("/admin/members/{id}/delete")
+    public String adminDelete(@PathVariable Long id,
+                              Authentication authentication,
+                              RedirectAttributes redirectAttributes) {
+
+        try {
+            memberService.delete(id, authentication.getName());
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("msg", e.getMessage());
+        }
+        redirectAttributes.addFlashAttribute("msg", "삭제가 완료되었습니다.");
         return "redirect:/admin/members";
     }
 
