@@ -71,7 +71,7 @@ public class GlobalModelAttributeAdvice {
             //  Controller 메서드명 가져오기
             String methodName = handlerMethod.getMethod().getName();
 
-            // 로긏 룰력 : [GET] /vlist -> VisitorController.list()
+            // 로그 출력 : [GET] /vlist -> VisitorController.list()
             log.info("[{}] {} -> {}.{}()",
                     request.getMethod(),     // GET, POST, PUT
                     request.getRequestURI(), // 요청 주소
